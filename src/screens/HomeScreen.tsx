@@ -12,15 +12,19 @@ const HomeScreen = () => {
 
   return (
     <View
-      style={[styles.container, { paddingTop: insets.top }]}
+      style={[styles.container,
+        { paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right
+        }]}
     >
+      <View style={styles.backBox}/>
       <HeaderBar />
 
 
       <View style={styles.actionsContainer}>
-        <ActionCard image={require("../assets/questions.png")} title="Questions" onPress={()=>{
-
-        }}/>
+        <ActionCard image={require("../assets/questions.png")} title="Questions" />
         <ActionCard image={require("../assets/messages.png")} title="Messages" />
         <ActionCard image={require("../assets/reminders.png")} title="Reminders" />
         <ActionCard image={require("../assets/calender.png")} title="Calendar" />
@@ -31,19 +35,21 @@ const HomeScreen = () => {
 
 
       <OfferCard
-        bgColor="#D7F5D4"
+        bgColor={colors.green}
         title="Get the Best Medical Service"
-        subtitle="Rem illum facere quo corporis quis in saepe iacique ut quos pariatur."
+        subtitle="Connect with certified experts to receive personalized and reliable health recommendations."
         discount=""
         image={require('../assets/doctor.png')}
       />
       <OfferCard
-        bgColor="#E9DBF8"
+        buttonTitle={"SHOP NOW"}
+        bgColor={colors.purple}
         title="On Health Products"
         subtitle=""
         discount="UPTO 80% offer"
         image={require('../assets/vitamins.png')}
       />
+
     </View>
   );
 };
@@ -62,4 +68,14 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginTop: 20,
   },
+  backBox: {
+    position: 'absolute',
+    backgroundColor: colors.pink,
+    width: '50%',
+    height: 180,
+    borderRadius:15,
+    top: 522,
+    left: -50,
+    zIndex: 0,
+  }
 });

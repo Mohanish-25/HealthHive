@@ -34,7 +34,7 @@ const SplashScreen = () => {
       <Animatable.Image
         animation="fadeInDown"
         duration={1500}
-        source={require('../assets/applogo.png')} // replace with your logo
+        source={require('../assets/appicon.png')} // replace with your logo
         style={styles.logo}
         resizeMode="contain"
       />

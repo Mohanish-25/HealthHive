@@ -11,19 +11,32 @@ const HomeTabs = () => (
   <Tab.Navigator
     screenOptions={{
       headerShown: false,
-      tabBarActiveTintColor: colors.primary,
-      tabBarLabelStyle: { fontSize: 12 },
+      tabBarActiveTintColor: colors.teal,
+      tabBarShowLabel: false,
+      tabBarItemStyle:{
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      tabBarStyle:{
+        backgroundColor: colors.tabBarColor,
+        borderTopLeftRadius:15,
+        borderTopRightRadius:15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: 80,
+        paddingTop: 4,
+      }
     }}
   >
     <Tab.Screen
       name="Home"
       component={HomeScreen}
-      options={{ tabBarIcon: ({ color }) => <Icon name="home" color={color} size={22} /> }}
+      options={{ tabBarIcon: ({ color }) => <Icon name="home" color={color} size={34} /> }}
     />
     <Tab.Screen
       name="Reminder"
       component={ReminderScreen}
-      options={{ tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={22} /> }}
+      options={{ tabBarIcon: ({ color }) => <Icon name="bell" color={color} size={30} /> }}
     />
   </Tab.Navigator>
 );
