@@ -11,6 +11,11 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		5DA11907C1BE454B9B3B470E /* BalooThambi2-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CBA28A4E97094AE2975F9C02 /* BalooThambi2-Bold.ttf */; };
+		FA7A15B8BFA84C67B7442267 /* BalooThambi2-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BAD22C81C1CC468A95438FA1 /* BalooThambi2-ExtraBold.ttf */; };
+		1328C3AB76444A0595CB3CF3 /* BalooThambi2-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0A2F1F6ACD2845DAA31CF8C1 /* BalooThambi2-Medium.ttf */; };
+		E78E59F7D8AD463680707BEE /* BalooThambi2-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60A94783AF7446A8B3E74938 /* BalooThambi2-Regular.ttf */; };
+		8972CDD8D9A346EE93DB10B9 /* BalooThambi2-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 18AACCFCDB3C445FBCE63ED2 /* BalooThambi2-SemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +29,11 @@
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = HealthHive/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = HealthHive/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		CBA28A4E97094AE2975F9C02 /* BalooThambi2-Bold.ttf */ = {isa = PBXFileReference; name = "BalooThambi2-Bold.ttf"; path = "../src/assets/fonts/BalooThambi2-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BAD22C81C1CC468A95438FA1 /* BalooThambi2-ExtraBold.ttf */ = {isa = PBXFileReference; name = "BalooThambi2-ExtraBold.ttf"; path = "../src/assets/fonts/BalooThambi2-ExtraBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		0A2F1F6ACD2845DAA31CF8C1 /* BalooThambi2-Medium.ttf */ = {isa = PBXFileReference; name = "BalooThambi2-Medium.ttf"; path = "../src/assets/fonts/BalooThambi2-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		60A94783AF7446A8B3E74938 /* BalooThambi2-Regular.ttf */ = {isa = PBXFileReference; name = "BalooThambi2-Regular.ttf"; path = "../src/assets/fonts/BalooThambi2-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		18AACCFCDB3C445FBCE63ED2 /* BalooThambi2-SemiBold.ttf */ = {isa = PBXFileReference; name = "BalooThambi2-SemiBold.ttf"; path = "../src/assets/fonts/BalooThambi2-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +84,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				42825212F44844879228FE50 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -96,6 +107,19 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		42825212F44844879228FE50 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				CBA28A4E97094AE2975F9C02 /* BalooThambi2-Bold.ttf */,
+				BAD22C81C1CC468A95438FA1 /* BalooThambi2-ExtraBold.ttf */,
+				0A2F1F6ACD2845DAA31CF8C1 /* BalooThambi2-Medium.ttf */,
+				60A94783AF7446A8B3E74938 /* BalooThambi2-Regular.ttf */,
+				18AACCFCDB3C445FBCE63ED2 /* BalooThambi2-SemiBold.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -159,6 +183,11 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				5DA11907C1BE454B9B3B470E /* BalooThambi2-Bold.ttf in Resources */,
+				FA7A15B8BFA84C67B7442267 /* BalooThambi2-ExtraBold.ttf in Resources */,
+				1328C3AB76444A0595CB3CF3 /* BalooThambi2-Medium.ttf in Resources */,
+				E78E59F7D8AD463680707BEE /* BalooThambi2-Regular.ttf in Resources */,
+				8972CDD8D9A346EE93DB10B9 /* BalooThambi2-SemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
