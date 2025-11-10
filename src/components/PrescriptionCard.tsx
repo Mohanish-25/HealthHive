@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
+    fontWeight: '600',
     marginBottom: 6,
     fontFamily:"BalooThambi2-Bold",
     color:colors.black3,
@@ -63,10 +63,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 6,
     height: 40,
+    alignItems: 'center',
   },
   buttonText: {
     color: colors.white,
-    fontWeight: '700',
+    fontWeight: '600',
     fontFamily:"BalooThambi2-Bold",
     fontSize: 18,
   },
