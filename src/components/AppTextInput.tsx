@@ -46,7 +46,7 @@ export default AppTextInput;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginBottom: 20,
+    marginVertical: 20,
   },
   inputLabel: {
     position: 'absolute',
@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 10,
+    color: 'black',
   },
   textInput: {
     flex: 1,
