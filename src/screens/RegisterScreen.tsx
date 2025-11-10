@@ -4,22 +4,28 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import AppTextInput from '../components/AppTextInput.tsx';
-import colors from '../constants/colors.ts';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+import { useAuthActions } from '../utils/hooks/useAuthActions.ts';
 import { RootStackParamList } from '../navigation/types.ts';
+import AppTextInput from '../components/AppTextInput.tsx';
+import colors from '../constants/colors.ts';
 
 type RegisterScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Register'>
 
 const RegisterScreen  = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-
   const insets = useSafeAreaInsets();
+  const { loading, handleSignup } = useAuthActions();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+
   const navigation = useNavigation<RegisterScreenNavigationProp>();
+
 
   return (
     <View style={[styles.container,
@@ -39,7 +45,7 @@ const RegisterScreen  = () => {
           label="Email"
           placeholder={'Enter your email'}
           value={email}
-          onChangeText={()=>setEmail(email)}
+          onChangeText={(text:string)=>setEmail(text)}
           keyboardType={'email-address'}
         />
 
@@ -48,7 +54,7 @@ const RegisterScreen  = () => {
           label="Password"
           placeholder={'Enter your password"'}
           value={password}
-          onChangeText={()=>setPassword(password)}
+          onChangeText={(text:string)=>setPassword(text)}
         />
 
 
@@ -60,8 +66,16 @@ const RegisterScreen  = () => {
         </View>
 
 
-        <TouchableOpacity style={styles.registerButton} onPress={() => {}}>
-          <Text style={styles.registerButtonText}>LOGIN</Text>
+        <TouchableOpacity
+          style={[styles.registerButton, loading && { opacity: 0.7 }]}
+          onPress={()=>handleSignup(email, password)}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color={colors.white} />
+          ) : (
+            <Text style={styles.registerButtonText}>REGISTER</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>

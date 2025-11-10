@@ -23,7 +23,6 @@ const HomeTabs = () => (
         borderTopRightRadius:15,
         alignItems: 'center',
         justifyContent: 'center',
-        height: 80,
         paddingTop: 4,
       }
     }}

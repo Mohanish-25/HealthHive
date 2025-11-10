@@ -4,24 +4,27 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
+  ActivityIndicator,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import AppTextInput from '../components/AppTextInput.tsx';
-import colors from '../constants/colors.ts';
-import {
-  NativeStackNavigationProp,
-} from '@react-navigation/native-stack';
+import { NativeStackNavigationProp} from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types.ts';
 import { useNavigation } from '@react-navigation/native';
+import { useAuthActions } from '../utils/hooks/useAuthActions.ts';
+
+import AppTextInput from '../components/AppTextInput.tsx';
+import colors from '../constants/colors.ts';
 
 type LoginScreenNavigationProps = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen  = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-
   const insets = useSafeAreaInsets();
+  const { loading, handleLogin } = useAuthActions();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   const navigation = useNavigation<LoginScreenNavigationProps>();
+
 
   return (
     <View style={[styles.container,
@@ -41,7 +44,7 @@ const LoginScreen  = () => {
           label="Email"
           placeholder={'Enter your email'}
           value={email}
-          onChangeText={()=>setEmail(email)}
+          onChangeText={(text:string)=>setEmail(text)}
           keyboardType={'email-address'}
         />
 
@@ -50,7 +53,7 @@ const LoginScreen  = () => {
           label="Password"
           placeholder={'Enter your password"'}
           value={password}
-          onChangeText={()=>setPassword(password)}
+          onChangeText={(text:string)=>setPassword(text)}
         />
 
 
@@ -70,8 +73,14 @@ const LoginScreen  = () => {
         </View>
 
 
-        <TouchableOpacity style={styles.loginButton} onPress={() => {navigation.replace('HomeTabs')}}>
-          <Text style={styles.loginButtonText}>LOGIN</Text>
+        <TouchableOpacity style={[styles.loginButton,loading && { opacity: 0.7 }]}
+                          onPress={()=>handleLogin(email, password)}
+                          disabled={loading}>
+          {loading ? (
+            <ActivityIndicator color={colors.white} />
+          ) : (
+            <Text style={styles.loginButtonText}>LOGIN</Text>
+          )}
         </TouchableOpacity>
       </View>
     </View>

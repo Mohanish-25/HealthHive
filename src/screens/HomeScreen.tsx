@@ -1,5 +1,5 @@
 import React from 'react';
-import {  View, StyleSheet,} from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HeaderBar from '../components/HeaderBar.tsx';
 import ActionCard from '../components/ActionCard.tsx';
@@ -11,7 +11,7 @@ const HomeScreen = () => {
   const insets = useSafeAreaInsets();
 
   return (
-    <View
+    <ScrollView
       style={[styles.container,
         { paddingTop: insets.top,
           paddingBottom: insets.bottom,
@@ -50,7 +50,7 @@ const HomeScreen = () => {
         image={require('../assets/vitamins.png')}
       />
 
-    </View>
+    </ScrollView>
   );
 };
 

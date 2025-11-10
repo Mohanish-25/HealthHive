@@ -4,6 +4,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import auth from'@react-native-firebase/auth';
+
 import { RootStackParamList } from '../navigation/types.ts';
 
 type SplashScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
@@ -12,10 +14,17 @@ const SplashScreen = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<SplashScreenNavigationProp>();
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.replace('HomeTabs'); // Navigate to Login or Preloader
-    }, 2500);
-    return () => clearTimeout(timer);
+    const unsubscribe = auth().onAuthStateChanged(user => {
+      setTimeout(() => {
+        if (user) {
+          navigation.replace('HomeTabs'); // already logged in
+        } else {
+          navigation.replace('Login');
+        }
+      }, 1500); // splash delay
+    });
+
+    return unsubscribe; // clean up listener
   }, [navigation]);
 
   return (
