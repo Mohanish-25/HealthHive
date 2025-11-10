@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../App';
+import { RootStackParamList } from '../navigation/types.ts';
 
 type SplashScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
 
@@ -13,7 +13,7 @@ const SplashScreen = () => {
   const navigation = useNavigation<SplashScreenNavigationProp>();
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Login'); // Navigate to Login or Preloader
+      navigation.replace('HomeTabs'); // Navigate to Login or Preloader
     }, 2500);
     return () => clearTimeout(timer);
   }, [navigation]);

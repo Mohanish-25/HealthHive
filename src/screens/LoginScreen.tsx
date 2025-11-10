@@ -8,12 +8,20 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppTextInput from '../components/AppTextInput.tsx';
 import colors from '../constants/colors.ts';
+import {
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/types.ts';
+import { useNavigation } from '@react-navigation/native';
+
+type LoginScreenNavigationProps = NativeStackNavigationProp<RootStackParamList, 'Login'>;
 
 const LoginScreen  = () => {
-  const[password, setPassword] = useState();
   const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
 
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<LoginScreenNavigationProps>();
 
   return (
     <View style={[styles.container,
@@ -56,13 +64,13 @@ const LoginScreen  = () => {
 
         <View style={styles.registerContainer}>
           <Text style={styles.registerText}>Don't Have an Account : </Text>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={() => {navigation.replace('Register')}}>
             <Text style={styles.registerLink}>Click here to register</Text>
           </TouchableOpacity>
         </View>
 
 
-        <TouchableOpacity style={styles.loginButton} onPress={() => {}}>
+        <TouchableOpacity style={styles.loginButton} onPress={() => {navigation.replace('HomeTabs')}}>
           <Text style={styles.loginButtonText}>LOGIN</Text>
         </TouchableOpacity>
       </View>
