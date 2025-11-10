@@ -11,5 +11,5 @@ export default {
   green:"#C8F5C4",
   purple:"#D7D0FF",
   pink:"#F5E1E9",
-  tabBarColor:"#D9D9D9"
+  tabBarColor:"#e0ede9"
 }

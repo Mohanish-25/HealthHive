@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     color: colors.black,
     fontWeight: '600',
     fontSize: 20,
+    fontFamily:"BalooThambi2-Bold"
   },
   title: {
     color: colors.black3,

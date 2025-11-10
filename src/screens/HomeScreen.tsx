@@ -46,7 +46,7 @@ const HomeScreen = () => {
         bgColor={colors.purple}
         title="On Health Products"
         subtitle=""
-        discount="UPTO 80% offer"
+        discount="UPTO 80% off"
         image={require('../assets/vitamins.png')}
       />
 
