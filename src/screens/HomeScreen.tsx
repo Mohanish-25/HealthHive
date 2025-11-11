@@ -6,9 +6,15 @@ import ActionCard from '../components/ActionCard.tsx';
 import PrescriptionCard from '../components/PrescriptionCard.tsx';
 import OfferCard from '../components/OfferCard.tsx';
 import colors from '../constants/colors.ts';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/types.ts';
+
+type HomeScreenNavigationProps = NativeStackNavigationProp<RootStackParamList, 'OrderScreen'>
 
 const HomeScreen = () => {
   const insets = useSafeAreaInsets();
+  const navigation = useNavigation<HomeScreenNavigationProps>();
 
   return (
     <ScrollView
@@ -31,7 +37,7 @@ const HomeScreen = () => {
       </View>
 
 
-      <PrescriptionCard />
+      <PrescriptionCard onPress={()=>{navigation.push('OrderScreen')}} />
 
 
       <OfferCard

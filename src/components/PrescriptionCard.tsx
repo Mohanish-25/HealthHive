@@ -2,7 +2,11 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import colors from '../constants/colors.ts';
 
-const PrescriptionCard = () => {
+type PrescriptionCardProps = {
+  onPress: () => void;
+}
+
+const PrescriptionCard = ({onPress}:PrescriptionCardProps) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>UPLOAD PRESCRIPTION</Text>
@@ -14,7 +18,7 @@ const PrescriptionCard = () => {
       <Text style={styles.offer} numberOfLines={2}>Flat 25% OFF ON MEDICINES</Text>
         </View>
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={onPress}>
         <Text style={styles.buttonText}>ORDER NOW</Text>
       </TouchableOpacity>
       </View>
