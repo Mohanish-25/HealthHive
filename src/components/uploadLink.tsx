@@ -5,8 +5,8 @@ type UploadLinkCardProps = { label: string; gif: any; onPress?: () => void };
 const UploadLinkCard = ({ label, gif, onPress }: UploadLinkCardProps) => {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
-      <Image source={gif} style={styles.gif} resizeMode="contain" />{' '}
-      <Text style={styles.label}>{label}</Text>{' '}
+      <Image source={gif} style={styles.gif} resizeMode="contain" />
+      <Text style={styles.label}>{label}</Text>
     </TouchableOpacity>
   );
 };

@@ -1,11 +1,20 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView,FlatList, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import PharmacyCard from '../components/PharmacyCard';
 import UploadOptionCard from '../components/UploadOptionCard';
+import UploadLinkCard from '../components/uploadLink';
+import { uploadPrescriptionToCloudinary } from '../utils/services/CloudinaryService';
 import colors from '../constants/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import UploadLinkCard from '../components/uploadLink.tsx';
 
 const pharmacies = [
   {
@@ -23,21 +32,24 @@ const pharmacies = [
     rating: 4.5,
     reviews: 120,
     image: require('../assets/pharmacy2.png'),
-  }, {
+  },
+  {
     id: 3,
     name: '24 pharmacy',
     distance: '5km',
     rating: 4.5,
     reviews: 120,
     image: require('../assets/pharmacy2.png'),
-  }, {
+  },
+  {
     id: 4,
     name: '24 pharmacy',
     distance: '5km',
     rating: 4.5,
     reviews: 120,
     image: require('../assets/pharmacy2.png'),
-  }, {
+  },
+  {
     id: 5,
     name: '24 pharmacy',
     distance: '5km',
@@ -48,8 +60,10 @@ const pharmacies = [
 ];
 
 const OrderScreen = () => {
-
   const insets = useSafeAreaInsets();
+  const [selectedImageUri, setSelectedImageUri] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [resetTrigger, setResetTrigger] = useState(0);
 
   const renderPharmacyCard = ({ item }: any) => (
     <PharmacyCard
@@ -62,13 +76,45 @@ const OrderScreen = () => {
     />
   );
 
-  return (
-    <ScrollView style={[styles.container,{ paddingTop: insets.top,
-      paddingBottom: insets.bottom,
-      paddingLeft: insets.left,
-      paddingRight: insets.right
-    }]} showsVerticalScrollIndicator={false}>
+  const handleContinue = async () => {
+    if (!selectedImageUri) {
+      Alert.alert('No File Selected', 'Please upload a prescription image first.');
+      return;
+    }
 
+    try {
+      setUploading(true);
+      const result = await uploadPrescriptionToCloudinary(selectedImageUri);
+
+      if (result?.success) {
+        Alert.alert('Success', 'Prescription uploaded successfully!');
+        setResetTrigger(prev => prev + 1);
+        setSelectedImageUri(null);
+      } else {
+        Alert.alert('Upload Failed', 'Please try again.');
+      }
+    } catch (error: any) {
+      console.error(error);
+      Alert.alert('Error', error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <ScrollView
+      style={[
+        styles.container,
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        },
+      ]}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity>
           <Icon name="arrow-left" size={24} color={colors.black} />
@@ -79,13 +125,13 @@ const OrderScreen = () => {
         </View>
       </View>
 
-
+      {/* Pharmacy List */}
       <Text style={styles.sectionTitle}>Pharmacy Nearby</Text>
       <FlatList
         horizontal
         data={pharmacies}
         renderItem={renderPharmacyCard}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={item => item.id.toString()}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.pharmacyList}
       />
@@ -98,12 +144,26 @@ const OrderScreen = () => {
         </Text>
 
         <View style={styles.uploadOptions}>
-          <UploadLinkCard gif={require("../assets/uploadLink.gif")} label="Upload Link" />
-          <UploadOptionCard gif={require("../assets/upload.gif")} label="Upload File" />
+          <UploadLinkCard
+            gif={require('../assets/uploadLink.gif')}
+            label="Upload Link"
+          />
+          <UploadOptionCard
+            gif={require('../assets/upload.gif')}
+            label="Upload File"
+            onImageSelected={uri => setSelectedImageUri(uri)}
+            resetTrigger={resetTrigger}
+          />
         </View>
 
-        <TouchableOpacity style={styles.continueButton}>
-          <Text style={styles.continueText}>Continue</Text>
+        <TouchableOpacity
+          style={[styles.continueButton, uploading && { opacity: 0.6 }]}
+          onPress={handleContinue}
+          disabled={uploading}
+        >
+          <Text style={styles.continueText}>
+            {uploading ? 'Uploading...' : 'Continue'}
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -115,8 +175,8 @@ export default OrderScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingHorizontal:10,
+    backgroundColor: colors.white,
+    paddingHorizontal: 10,
   },
   header: {
     flexDirection: 'row',
@@ -158,14 +218,14 @@ const styles = StyleSheet.create({
   uploadSubtext: {
     textAlign: 'center',
     color: colors.black,
-    fontWeight:"400",
+    fontWeight: '400',
     fontFamily: 'BalooThambi2-Regular',
     fontSize: 18,
     marginBottom: 20,
   },
   uploadOptions: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.black,
