@@ -8,72 +8,80 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Alert,
+  Dimensions,
 } from 'react-native';
-import firestore from '@react-native-firebase/firestore';
-import auth from '@react-native-firebase/auth';
-import colors from '../constants/colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import colors from '../constants/colors';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/types';
+
+import { getAuth, signOut } from '@react-native-firebase/auth';
+import {
+  getFirestore,
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+} from '@react-native-firebase/firestore';
 
 interface Prescription {
   id: string;
   imageUrl: string;
   createdAt?: { toDate: () => Date };
-  status: string;
+  status?: string;
   pharmacyId?: string;
 }
 
-type ReminderScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList
->;
+type ReminderNavProp = NativeStackNavigationProp<RootStackParamList>;
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const ReminderScreen = () => {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation<ReminderScreenNavigationProp>();
+  const navigation = useNavigation<ReminderNavProp>();
+
   const [loading, setLoading] = useState(true);
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
 
-  // 🔥 Fetch user prescriptions
+  const auth = getAuth();
+  const db = getFirestore();
+
   useEffect(() => {
-    const user = auth().currentUser;
+    const user = auth.currentUser;
     if (!user) return;
 
-    const unsubscribe = firestore()
-      .collection('users')
-      .doc(user.uid)
-      .collection('prescriptions')
-      .orderBy('createdAt', 'desc')
-      .onSnapshot(
-        (snapshot) => {
-          const data = snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          })) as Prescription[];
-          setPrescriptions(data);
-          setLoading(false);
-        },
-        (error) => {
-          console.error('Error fetching prescriptions:', error);
-          setLoading(false);
-        },
-      );
+    const prescriptionsRef = collection(db, 'users', user.uid, 'prescriptions');
+    const q = query(prescriptionsRef, orderBy('createdAt', 'desc'));
+
+    const unsubscribe = onSnapshot(
+      q,
+      snapshot => {
+        const data = snapshot.docs.map((doc:any) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Prescription[];
+
+        setPrescriptions(data);
+        setLoading(false);
+      },
+      () => {
+        setLoading(false);
+      },
+    );
 
     return unsubscribe;
   }, []);
 
-  // 🔒 Logout function
   const handleLogout = async () => {
     try {
-      await auth().signOut();
+      await signOut(auth);
       navigation.reset({
         index: 0,
-        routes: [{ name: 'Login' }], // Replace with your Login route name
+        routes: [{ name: 'Login' }],
       });
-    } catch (error) {
-      console.error('Logout failed:', error);
+    } catch {
       Alert.alert('Error', 'Failed to log out. Please try again.');
     }
   };
@@ -85,14 +93,14 @@ const ReminderScreen = () => {
 
     return (
       <View style={styles.card}>
-        <Image source={{ uri: item.imageUrl }} style={styles.image} />
+        <Image source={{ uri: item.imageUrl }} style={styles.imageLarge} />
         <View style={styles.details}>
           <Text style={styles.date}>{date}</Text>
           <Text style={styles.status}>
-            Status: <Text style={styles.statusValue}>{item.status}</Text>
+            Status: <Text style={styles.statusValue}>{item.status || 'Processing'}</Text>
           </Text>
           {item.pharmacyId && (
-            <Text style={styles.pharmacy}>Pharmacy: {item.pharmacyId}</Text>
+            <Text style={styles.pharmacy}>{item.pharmacyId}</Text>
           )}
         </View>
       </View>
@@ -111,7 +119,6 @@ const ReminderScreen = () => {
         },
       ]}
     >
-      {/* Header with Logout */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Icon name="clock-outline" size={26} color={colors.primary} />
@@ -138,9 +145,9 @@ const ReminderScreen = () => {
         <FlatList
           data={prescriptions}
           renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.listContent}
+          keyExtractor={item => item.id}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContent}
         />
       )}
     </View>
@@ -156,11 +163,10 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between', // 👈 separates title and logout
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderBottomWidth: 0.5,
+    borderBottomWidth: 0.4,
     borderBottomColor: '#ddd',
   },
   headerLeft: {
@@ -168,11 +174,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 22,
-    fontWeight: '600',
-    fontFamily: 'BalooThambi2-SemiBold',
     marginLeft: 8,
+    fontSize: 22,
+    fontWeight: '700',
     color: colors.black,
+    fontFamily: 'BalooThambi2-SemiBold',
   },
   logoutButton: {
     flexDirection: 'row',
@@ -183,53 +189,51 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   logoutText: {
+    marginLeft: 4,
     color: colors.white,
     fontSize: 14,
     fontWeight: '600',
-    marginLeft: 4,
     fontFamily: 'BalooThambi2-Medium',
   },
   listContent: {
     padding: 16,
   },
   card: {
-    flexDirection: 'row',
     backgroundColor: '#fff',
-    borderRadius: 12,
-    marginBottom: 16,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    borderRadius: 16,
+    marginBottom: 20,
     overflow: 'hidden',
+    elevation: 3,
   },
-  image: {
-    width: 100,
-    height: 100,
+  imageLarge: {
+    width: SCREEN_WIDTH - 32,
+    height: SCREEN_WIDTH - 32,
+    alignSelf: 'center',
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    backgroundColor: '#eee',
   },
   details: {
-    flex: 1,
-    padding: 10,
-    justifyContent: 'center',
+    padding: 14,
   },
   date: {
-    fontSize: 14,
+    fontSize: 13,
     color: colors.gray,
     marginBottom: 4,
   },
   status: {
     fontSize: 16,
-    color: colors.black,
     fontWeight: '500',
+    color: colors.black,
   },
   statusValue: {
     color: colors.primary,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   pharmacy: {
-    fontSize: 14,
-    color: colors.gray,
     marginTop: 4,
+    color: colors.gray,
+    fontSize: 14,
   },
   center: {
     flex: 1,
@@ -237,13 +241,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    fontSize: 16,
     marginTop: 10,
     color: colors.gray,
+    fontSize: 16,
   },
   emptyText: {
-    fontSize: 16,
     marginTop: 10,
     color: colors.gray,
+    fontSize: 16,
   },
 });
