@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { onAuthStateChanged } from '@react-native-firebase/auth';
-import auth from '@react-native-firebase/auth';
+import { getAuth, onAuthStateChanged } from '@react-native-firebase/auth';
 import colors from '../constants/colors';
 import { RootStackParamList } from '../navigation/types';
 
@@ -17,13 +16,15 @@ type SplashScreenNavigationProp = NativeStackNavigationProp<
 const SplashScreen = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<SplashScreenNavigationProp>();
+  const auth = getAuth();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth(), user => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
       setTimeout(() => {
         navigation.replace(user ? 'HomeTabs' : 'Login');
       }, 2300);
     });
+
     return unsubscribe;
   }, [navigation]);
 
@@ -69,7 +70,7 @@ export default SplashScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.white,
+    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
     overflow: 'hidden',
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
     fontSize: 42,
     fontWeight: '700',
     fontFamily: 'BalooThambi2-Bold',
-    color: colors.white,
+    color: '#fff',
     zIndex: 2,
     letterSpacing: 1,
   },
