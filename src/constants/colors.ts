@@ -13,5 +13,6 @@ export default {
   pink:"#F5E1E9",
   tabBarColor:"#e0ede9",
   lightGreen:"#41B592",
-  gray2:"#453E3E"
+  gray2:"#453E3E",
+  orange:"#FFD700"
 }

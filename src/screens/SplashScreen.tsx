@@ -1,30 +1,30 @@
 import React, { useEffect } from 'react';
-import { View, StatusBar, StyleSheet } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Animatable from 'react-native-animatable';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import auth from'@react-native-firebase/auth';
+import { onAuthStateChanged } from '@react-native-firebase/auth';
+import auth from '@react-native-firebase/auth';
+import colors from '../constants/colors';
+import { RootStackParamList } from '../navigation/types';
 
-import { RootStackParamList } from '../navigation/types.ts';
-
-type SplashScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Splash'>;
+type SplashScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'Splash'
+>;
 
 const SplashScreen = () => {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<SplashScreenNavigationProp>();
-  useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged(user => {
-      setTimeout(() => {
-        if (user) {
-          navigation.replace('HomeTabs'); // already logged in
-        } else {
-          navigation.replace('Login');
-        }
-      }, 1500); // splash delay
-    });
 
-    return unsubscribe; // clean up listener
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth(), user => {
+      setTimeout(() => {
+        navigation.replace(user ? 'HomeTabs' : 'Login');
+      }, 2300);
+    });
+    return unsubscribe;
   }, [navigation]);
 
   return (
@@ -39,19 +39,24 @@ const SplashScreen = () => {
         },
       ]}
     >
-      <StatusBar backgroundColor="#4A90E2" barStyle="light-content" />
-      <Animatable.Image
-        animation="fadeInDown"
-        duration={1500}
-        source={require('../assets/appicon.png')} // replace with your logo
-        style={styles.logo}
-        resizeMode="contain"
+      <StatusBar hidden />
+
+      <Animatable.View
+        animation={{
+          0: { opacity: 0.9, transform: [{ scale: 0 }] },
+          0.3: { opacity: 1, transform: [{ scale: 1 }] },
+          1: { opacity: 1, transform: [{ scale: 15 }] },
+        }}
+        easing="ease-in-out"
+        duration={2000}
+        style={styles.expandingCircle}
       />
+
       <Animatable.Text
-        animation="fadeInUp"
-        delay={500}
-        duration={1200}
-        style={styles.title}
+        animation="fadeIn"
+        delay={400}
+        duration={1000}
+        style={styles.appName}
       >
         HealthHive
       </Animatable.Text>
@@ -64,19 +69,24 @@ export default SplashScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#4A90E2',
-    alignItems: 'center',
+    backgroundColor: colors.white,
     justifyContent: 'center',
+    alignItems: 'center',
+    overflow: 'hidden',
   },
-  logo: {
-    width: 150,
-    height: 150,
+  expandingCircle: {
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    backgroundColor: colors.primary,
+    borderRadius: 100,
   },
-  title: {
-    color: '#fff',
-    fontSize: 28,
+  appName: {
+    fontSize: 42,
     fontWeight: '700',
-    marginTop: 20,
+    fontFamily: 'BalooThambi2-Bold',
+    color: colors.white,
+    zIndex: 2,
     letterSpacing: 1,
   },
 });
