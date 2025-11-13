@@ -54,6 +54,7 @@ const LoginScreen  = () => {
           placeholder={'Enter your password"'}
           value={password}
           onChangeText={(text:string)=>setPassword(text)}
+          secureTextEntry={true}
         />
 
 
